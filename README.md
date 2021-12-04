@@ -37,7 +37,7 @@ input message.
   * Sklearn's TfidfTransformer class is doing all the heavy lifting in this part. 
   * In essence, we are creating a numeric measure or feature to assess word importance within a collection of documents.
 
-* Step 3: Starting Very Extraction
+* Step 3: Starting Verb Extraction
   * This is a custom class leveraging Sklearn's base classes, BaseEstimator and TransformerMixin.
   * This class extracts the starting verb in every message or sentence. 
   * This is another engineered feature used to train the classifier.
