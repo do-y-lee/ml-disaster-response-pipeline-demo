@@ -8,6 +8,10 @@ categories are applicable. Essentially, we are using natural language processing
 which 36 target categories have the highest probabilities of success and generate a multioutput response for every 
 input message.
 
+## Pickled Model
+
+* `nlp_multi_classifier.pkl`: The original size of the pickled model was too large to push to Github.
+* Follow the steps under [Instructions](#instructions) to generate the model and run the web app.
 
 ## Core Files 
 
@@ -85,7 +89,7 @@ def build_model():
 ![results](results/classification_report.jpg)
 
 
-## Instructions:
+## Instructions
 
 1. Run the following commands in the project's root directory to set up your database and model.
 
