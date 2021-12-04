@@ -78,6 +78,7 @@ def build_model():
 ## Results
 
 * To assess model performance, we looked at precision, recall, f1-score, and support. Every target category has four performance metrics.
+  * Leveraged Sklearn's [classification_report](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.classification_report.html) function.
   * Based on these metrics, you can determine the shortcomings of the model.
   * For example, target categories like "security", "child_alone", "missing_people", "shope", and "fire" are all zeros or close to zero.
   * Due to lack of training data as well as lack of relevant features, model performance is skewed towards certain target categories.
@@ -86,7 +87,7 @@ def build_model():
 * F-beta score can be interpreted as a weighted harmonic mean of the precision and recall, where an F-beta score reaches its best value at 1 and worst score at 0. The F-beta score weights recall more than precision by a factor of beta. beta == 1.0 means recall and precision are equally important.
 * Support is the number of occurrences of each class in y_true.
 
-![results](results/classification_report.jpg)
+![results](results/classification_report.png)
 
 
 ## Instructions
