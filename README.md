@@ -2,11 +2,11 @@
 
 ## Objective
 
-> We are analyzing emergency text messages to create a multioutput classifier to predict which categories each message 
-falls under. There are total of 36 target categories and for every message the model will predict how many relevant 
-categories are applicable. Essentially, we are using natural language processing methods to create features to predict
-which 36 target categories have the highest probabilities of success and generate a multioutput response for every 
-input message.
+> We are analyzing emergency text messages to create a multioutput classifier to predict multiple target variables 
+> (binary categories) for each input message. There are total of 36 target categories and for every message the model 
+> will predict how many relevant categories are applicable. Essentially, we are using natural language processing 
+> methods to create features to predict which 36 target categories have the highest probabilities of success and 
+> generate a multioutput response for every input message.
 
 ## Pickled Model
 
