@@ -102,6 +102,10 @@ def build_train_model(X_train, y_train):
   * Based on these metrics, you can determine the shortcomings of the model.
   * For example, target categories like "security", "child_alone", "missing_people", "shope", and "fire" are all zeros or close to zero.
   * Due to lack of training data as well as lack of relevant features, model performance is skewed towards certain target categories.
+  * As the stack bar graph shows, many of the target variables suffer from class imbalance and thus contributing to relatively lower predictive power.
+
+![target_variable_binary_class_counts](results/target_categories_class_counts.png)
+
 * Precision is the ratio tp / (tp + fp) where tp is the number of true positives and fp the number of false positives. The precision is intuitively the ability of the classifier not to label as positive a sample that is negative.
 * Recall is the ratio tp / (tp + fn) where tp is the number of true positives and fn the number of false negatives. The recall is intuitively the ability of the classifier to find all the positive samples.
 * F-beta score can be interpreted as a weighted harmonic mean of the precision and recall, where an F-beta score reaches its best value at 1 and worst score at 0. The F-beta score weights recall more than precision by a factor of beta. beta == 1.0 means recall and precision are equally important.

@@ -18,6 +18,16 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 
 
 def load_data(database_filepath):
+    """
+    Parameters:
+        database_filepath (str): A string path to the database location.
+
+    Returns:
+        X (pd.DataFrame): Training data.
+        y (pd.DataFrame): Multiple target variable data.
+        category_names (list): List of target categories.
+    """
+
     # load data from database
     engine = create_engine(f'sqlite:///{database_filepath}')
     df = pd.read_sql_table('messages', engine)
@@ -34,11 +44,11 @@ def tokenize(text):
     """
     Input text is normalized and then tokenized. Next, the tokenized text is lemmatized and outputs a list of tokens.
 
-        Parameters:
-            text (str): Cleaned text string is passed into the function as input.
+    Parameters:
+        text (str): Cleaned text string is passed into the function as input.
 
-        Returns:
-            clean_tokens (list): Generates a list of cleaned tokens.
+    Returns:
+        clean_tokens (list): Generates a list of cleaned tokens.
     """
 
     url_regex = 'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
@@ -60,9 +70,25 @@ def tokenize(text):
 
 
 class StartingVerbExtractor(BaseEstimator, TransformerMixin):
-    # extract the starting verb of a sentence (new feature)
+    """
+    Extract the starting verb from each text message. Attributes are inherited through the base classes,
+    BaseEstimator and TransformerMixin.
+    """
+
     @staticmethod
     def starting_verb(text):
+        """
+        The method takes in text as input and text is split into sentences. Each sentence is tokenized into words and
+        tagged. If the first word is a verb or the first tag is 'RT', then it's flagged as True. If not, it will be
+        flagged as False.
+
+        Parameters:
+            text (str): Text message from the database.
+
+        Returns:
+            True or False (binary): Based on first_word or first_tag of the sent_tokenized(text), it outputs True or False.
+
+        """
         # tokenize by sentences
         sentence_list = nltk.sent_tokenize(text)
 
@@ -77,9 +103,21 @@ class StartingVerbExtractor(BaseEstimator, TransformerMixin):
         return False
 
     def fit(self, x, y=None):
+        """
+        Required to have a fit method when inheriting from Sklearn's base classes.
+        """
         return self
 
     def transform(self, X):
+        """
+        Parameters:
+            X (pd.DataFrame): Training data.
+
+        Returns:
+            pd.DataFrame(X_tagged) (pd.DataFrame): The starting_verb method is applied to the training data and
+            generates a tagged Pandas series and then converted to Pandas dataframe.
+        """
+
         # apply starting_verb function to all values in X
         X_tagged = pd.Series(X).apply(self.starting_verb)
         return pd.DataFrame(X_tagged)

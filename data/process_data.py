@@ -51,8 +51,11 @@ def save_data(df, database_filename):
 
 
 def main():
-    # sys.argv is a list in Python, which contains the command-line arguments passed to the script.
-    # With the len(sys.argv) function you can count the number of arguments.
+    """
+    sys.argv is a list in Python, which contains the command-line arguments passed to the script.
+    With the len(sys.argv) function you can count the number of arguments.
+    """
+
     if len(sys.argv) == 4:
 
         messages_filepath, categories_filepath, database_filepath = sys.argv[1:]
