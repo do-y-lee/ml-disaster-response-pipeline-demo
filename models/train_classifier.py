@@ -156,7 +156,7 @@ def build_train_model(X_train, y_train):
         'clf__estimator__min_samples_split': [2, 3, 4],
     }
     model = GridSearchCV(pipeline, param_grid=parameters, n_jobs=-1, verbose=5)
-    model.fit(X_train, y_train)
+    model = model.fit(X_train, y_train)
     return model
 
 
