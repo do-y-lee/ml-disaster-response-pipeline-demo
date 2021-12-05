@@ -7,6 +7,10 @@
 > will predict how many relevant categories are applicable. Essentially, we are using natural language processing 
 > methods to create features to predict which 36 target categories have the highest probabilities of success and 
 > generate a multioutput response for every input message.
+> 
+> If a successful model is created, various government agencies and private organizations can quickly identify
+> different types of emergencies and rapidly allocate resources. With acceptable precision and recall, the model can 
+> minimize wasteful spending and increase efficiency among first-responders to assist the public.
 
 ## Pickled Model
 
@@ -54,12 +58,21 @@
    * Take processed and engineered text numeric features and train against multiple target variables (36 target variables/categories).
 
 ```python
-def build_model():
+def build_train_model(X_train, y_train):
     """
-        File: models/train_classifier.py
+    Function is wrapped around Sklearn's Pipeline object. Pipeline object is designed to stack various data
+    transformation and model training layers to output a trained classifier. Sklearn's GridSearchCV is
+    used to tune the hyper-parameters to further tune the model during training.
+
+        Parameters:
+            X_train (pd.DataFrame): train data
+            y_train (pd.DataFrame): train multiple target variables
+
+        Returns:
+            model (object): Fitted and tuned multioutput classifier pipeline object
     """
+
     pipeline = Pipeline([
-        # Feature engineering
         ('features', FeatureUnion([
 
             ('text_pipeline', Pipeline([
@@ -69,10 +82,17 @@ def build_model():
 
             ('starting_verb', StartingVerbExtractor())
         ])),
-        # Model training
+
         ('clf', MultiOutputClassifier(RandomForestClassifier()))
     ])
-    return pipeline
+
+    parameters = {
+        'features__text_pipeline__count_vectorizer__max_df': (0.5, 0.75, 1.0),
+        'clf__estimator__min_samples_split': [2, 3, 4],
+    }
+    model = GridSearchCV(pipeline, param_grid=parameters, n_jobs=-1, verbose=5)
+    model.fit(X_train, y_train)
+    return model
 ```
 
 ## Results
@@ -95,9 +115,9 @@ def build_model():
 1. Run the following commands in the project's root directory to set up your database and model.
 
     - To run ETL pipeline that cleans data and stores in database
-        `python data/process_data.py data/disaster_messages.csv data/disaster_categories.csv data/DisasterResponse.db`
+        `python data/process_data.py data/disaster_messages.csv data/disaster_categories.csv UdacityDisasterResponse.db`
     - To run ML pipeline that trains classifier and saves
-        `python models/train_classifier.py data/DisasterResponse.db models/classifier.pkl`
+        `python models/train_classifier.py UdacityDisasterResponse.db nlp_multi_classifier.pkl`
 
 2. Run the following command in the app's directory to run your web app.
     `python run.py`

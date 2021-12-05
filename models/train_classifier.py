@@ -10,6 +10,7 @@ import nltk
 from sklearn.metrics import classification_report
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.multioutput import MultiOutputClassifier
+from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline, FeatureUnion
 from sklearn.base import BaseEstimator, TransformerMixin
@@ -30,6 +31,16 @@ def load_data(database_filepath):
 
 
 def tokenize(text):
+    """
+    Input text is normalized and then tokenized. Next, the tokenized text is lemmatized and outputs a list of tokens.
+
+        Parameters:
+            text (str): Cleaned text string is passed into the function as input.
+
+        Returns:
+            clean_tokens (list): Generates a list of cleaned tokens.
+    """
+
     url_regex = 'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
 
     # identify urls
@@ -74,7 +85,20 @@ class StartingVerbExtractor(BaseEstimator, TransformerMixin):
         return pd.DataFrame(X_tagged)
 
 
-def build_model():
+def build_train_model(X_train, y_train):
+    """
+    Function is wrapped around Sklearn's Pipeline object. Pipeline object is designed to stack various data
+    transformation and model training layers to output a trained classifier. Sklearn's GridSearchCV is
+    used to tune the hyper-parameters to further tune the model during training.
+
+        Parameters:
+            X_train (pd.DataFrame): train data
+            y_train (pd.DataFrame): train multiple target variables
+
+        Returns:
+            model (object): Fitted and tuned multioutput classifier pipeline object
+    """
+
     pipeline = Pipeline([
         ('features', FeatureUnion([
 
@@ -88,7 +112,14 @@ def build_model():
 
         ('clf', MultiOutputClassifier(RandomForestClassifier()))
     ])
-    return pipeline
+
+    parameters = {
+        'features__text_pipeline__count_vectorizer__max_df': (0.5, 0.75, 1.0),
+        'clf__estimator__min_samples_split': [2, 3, 4],
+    }
+    model = GridSearchCV(pipeline, param_grid=parameters, n_jobs=-1, verbose=5)
+    model.fit(X_train, y_train)
+    return model
 
 
 def evaluate_model(model, X_test, y_test, category_names):
@@ -111,10 +142,8 @@ def main():
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 
         print('Building model...')
-        model = build_model()
-
         print('Training model...')
-        model.fit(X_train, y_train)
+        model = build_train_model(X_train, y_train)
 
         print('Evaluating model...')
         evaluate_model(model, X_test, y_test, category_names)
