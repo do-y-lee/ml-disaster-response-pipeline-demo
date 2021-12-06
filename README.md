@@ -56,7 +56,7 @@
 2. Model Training
    * Leverage Sklearn's MultiOutputClassifier and RandomForestClassifier to train model. 
    * Take processed and engineered text numeric features and train against multiple target variables (36 target variables/categories).
-   * Additionally, a handful of hyperparameters are defined to tune the choosen hyperparameters using Sklearn's GridSearchCV, which helps to further optimize the model.
+   * Additionally, a handful of hyperparameters are tuned using Sklearn's GridSearchCV, which helps to further optimize the model.
 
 ```python
 def build_train_model(X_train, y_train):
