@@ -63,7 +63,7 @@ def build_train_model(X_train, y_train):
     """
     Function is wrapped around Sklearn's Pipeline object. Pipeline object is designed to stack various data
     transformation and model training layers to output a trained classifier. Sklearn's GridSearchCV is
-    used to tune the hyper-parameters to further tune the model during training.
+    used to tune the hyper-parameters to further optimize the model during training.
 
         Parameters:
             X_train (pd.DataFrame): train data
